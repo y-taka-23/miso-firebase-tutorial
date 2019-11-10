@@ -3,6 +3,7 @@
 module Web.LambdaTalk.Model
     ( Action(..)
     , Message(..)
+    , Model(..)
     , User(..)
     , initialAction
     , initialModel

@@ -24,7 +24,6 @@ import Miso
     , src_
     , text
     , type_
-    , ul_
     , value_
     )
 import Miso.String ( MisoString, fromMisoString, ms )
@@ -34,8 +33,12 @@ import Web.LambdaTalk.Model ( Action(..), Message(..), Model(..), User(..) )
 view :: Model -> View Action
 view model = div_ [] [
       navView model
-    , inputView model
-    , messageView model
+    , div_ [ class_ "columns" ] [
+        div_ [ classes_ [ "column", "col-8", "col-mx-auto" ] ] [
+              inputView model
+            , messageView model
+            ]
+        ]
     ]
 
 navView :: Model -> View Action
@@ -71,34 +74,31 @@ inputView :: Model -> View Action
 inputView model = case currentUser model of
     Nothing -> div_ [] []
     Just user ->
-        div_ [] [
-              div_ [ class_ "tile" ] [
-                  div_ [ class_ "tile-icon" ] [
-                      figure_
-                        [ class_ "avatar" ]
-                        [ img_ [ src_ . ms $ photoURL user ] ]
-                    ]
-                , div_ [ class_ "tile-content" ] [
-                      input_
-                        [ class_ "form-input"
-                        , type_ "text"
-                        , placeholder_ "What's happening?"
-                        , onInput (SetInput . fromMisoString)
-                        , value_ . ms $ currentInput model
-                        ]
-                    ]
-                , div_ [ class_ "tile-action" ] [
-                      button_
-                        [ classes_ [ "btn", "btn-primary" ]
-                        , onClick SaveMessage
-                        ] [ text "Post" ]
+          div_ [ class_ "tile" ] [
+              div_ [ class_ "tile-icon" ] [
+                  figure_
+                    [ class_ "avatar" ]
+                    [ img_ [ src_ . ms $ photoURL user ] ]
+                ]
+            , div_ [ class_ "tile-content" ] [
+                  input_
+                    [ class_ "form-input"
+                    , type_ "text"
+                    , placeholder_ "What's happening?"
+                    , onInput (SetInput . fromMisoString)
+                    , value_ . ms $ currentInput model
                     ]
                 ]
-            , div_ [ class_ "divider" ] []
+            , div_ [ class_ "tile-action" ] [
+                  button_
+                    [ classes_ [ "btn", "btn-primary" ]
+                    , onClick SaveMessage
+                    ] [ text "Post" ]
+                ]
             ]
 
 messageView :: Model -> View action
-messageView model = ul_ [] $ map messageItem $ messages model
+messageView model = div_ [] $ map messageItem $ messages model
 
 messageItem :: Message -> View action
 messageItem msg = li_ [ class_ "tile" ] [
