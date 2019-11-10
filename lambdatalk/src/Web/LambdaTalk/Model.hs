@@ -1,6 +1,12 @@
 {-# LANGUAGE DeriveGeneric #-}
 
-module Web.LambdaTalk.Model where
+module Web.LambdaTalk.Model
+    ( Action(..)
+    , Message(..)
+    , User(..)
+    , initialAction
+    , initialModel
+    ) where
 
 import Data.Text                   ( Text )
 import GHC.Generics                ( Generic )
@@ -14,10 +20,12 @@ data Action =
     | SetInput Text
     | ResetInput
     | SaveMessage
+    | LoadMessage Message
 
 data Model = Model {
       currentUser  :: Maybe User
     , currentInput :: Text
+    , messages     :: [Message]
     } deriving (Eq, Show)
 
 data User = User {
@@ -33,13 +41,15 @@ data Message = Message {
     , content :: Text
     } deriving (Eq, Show, Generic)
 
-instance ToJSVal Message
+instance FromJSVal Message
+instance ToJSVal   Message
 
 initialAction :: Action
 initialAction = NoOp
 
 initialModel :: Model
 initialModel = Model {
-      currentUser = Nothing
+      currentUser  = Nothing
     , currentInput = mempty
+    , messages     = []
     }

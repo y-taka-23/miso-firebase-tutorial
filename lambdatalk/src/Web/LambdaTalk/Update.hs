@@ -22,6 +22,7 @@ update SaveMessage model = model <# do
         Just msg -> do
             saveMessage msg
             pure ResetInput
+update (LoadMessage msg) model = noEff model { messages = msg : messages model }
 
 newMessage :: Model -> Maybe Message
 newMessage model = do

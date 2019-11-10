@@ -15,23 +15,27 @@ import Miso
     , href_
     , img_
     , input_
+    , li_
     , onClick
     , onInput
+    , p_
     , placeholder_
     , section_
     , src_
     , text
     , type_
+    , ul_
     , value_
     )
 import Miso.String ( MisoString, fromMisoString, ms )
 
-import Web.LambdaTalk.Model ( Action(..), Model(..), User(..) )
+import Web.LambdaTalk.Model ( Action(..), Message(..), Model(..), User(..) )
 
 view :: Model -> View Action
 view model = div_ [] [
       navView model
     , inputView model
+    , messageView model
     ]
 
 navView :: Model -> View Action
@@ -92,6 +96,24 @@ inputView model = case currentUser model of
                 ]
             , div_ [ class_ "divider" ] []
             ]
+
+messageView :: Model -> View action
+messageView model = ul_ [] $ map messageItem $ messages model
+
+messageItem :: Message -> View action
+messageItem msg = li_ [ class_ "tile" ] [
+     div_ [ class_ "tile-icon" ] [
+          figure_
+            [ classes_ [ "avatar", "avatar-lg" ] ]
+            [ img_ [ src_ . ms . photoURL $ author msg ] ]
+        ]
+    , div_ [ class_ "tile-content" ] [
+          p_
+            [ class_ "text-bold" ]
+            [ text . ms . displayName $ author msg ]
+        , p_ [] [ text . ms $ content msg ]
+        ]
+    ]
 
 github :: MisoString
 github = "https://github.com/y-taka-23/miso-firebase-tutorial"

@@ -1,6 +1,7 @@
 module Web.LambdaTalk.Firebase
     ( getCurrentUser
     , onAuthStateChanged
+    , onMessageAdded
     , saveMessage
     , signIn
     , signOut
@@ -14,6 +15,7 @@ import Language.Javascript.JSaddle
     , js
     , js0
     , js1
+    , js2
     , jsg
     , new
     , runJSaddle
@@ -54,4 +56,14 @@ saveMessage msg = do
     ref <- jsg "firebase" ^. js0 "database" ^.
             js0 "ref" ^. js1 "child" (val "messages")
     ref ^. js1 "push" (val msg)
+    pure ()
+
+onMessageAdded :: (Maybe Message -> IO ()) -> IO ()
+onMessageAdded io = do
+    ref <- jsg "firebase" ^. js0 "database" ^. js1 "ref" (val "messages")
+    ref ^. js1 "limitToLast" (val (5 :: Int)) ^.
+            js2 "on" (val "child_added") (function $ \_ _ [snapshot, _] -> do
+        v <- snapshot ^. js0 "val"
+        mMsg <- fromJSVal v
+        io mMsg)
     pure ()
