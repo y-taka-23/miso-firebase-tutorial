@@ -1,6 +1,7 @@
 module Web.LambdaTalk.Firebase
     ( getCurrentUser
     , onAuthStateChanged
+    , saveMessage
     , signIn
     , signOut
     ) where
@@ -16,10 +17,11 @@ import Language.Javascript.JSaddle
     , jsg
     , new
     , runJSaddle
+    , val
     , valIsNull
     )
 
-import Web.LambdaTalk.Model ( User )
+import Web.LambdaTalk.Model ( Message, User )
 
 signIn :: IO ()
 signIn = do
@@ -46,3 +48,10 @@ getCurrentUser = do
     if signedIn
         then fromJSVal user
         else pure Nothing
+
+saveMessage :: Message -> IO ()
+saveMessage msg = do
+    ref <- jsg "firebase" ^. js0 "database" ^.
+            js0 "ref" ^. js1 "child" (val "messages")
+    ref ^. js1 "push" (val msg)
+    pure ()

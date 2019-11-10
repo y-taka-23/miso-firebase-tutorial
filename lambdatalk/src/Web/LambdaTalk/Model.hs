@@ -2,9 +2,9 @@
 
 module Web.LambdaTalk.Model where
 
-import Data.Text
+import Data.Text                   ( Text )
 import GHC.Generics                ( Generic )
-import Language.Javascript.JSaddle ( FromJSVal )
+import Language.Javascript.JSaddle ( FromJSVal, ToJSVal )
 
 data Action =
       NoOp
@@ -12,6 +12,8 @@ data Action =
     | SignOut
     | SetUser (Maybe User)
     | SetInput Text
+    | ResetInput
+    | SaveMessage
 
 data Model = Model {
       currentUser  :: Maybe User
@@ -24,6 +26,14 @@ data User = User {
     } deriving (Eq, Show, Generic)
 
 instance FromJSVal User
+instance ToJSVal   User
+
+data Message = Message {
+      author  :: User
+    , content :: Text
+    } deriving (Eq, Show, Generic)
+
+instance ToJSVal Message
 
 initialAction :: Action
 initialAction = NoOp

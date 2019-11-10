@@ -86,7 +86,8 @@ inputView model = case currentUser model of
                 , div_ [ class_ "tile-action" ] [
                       button_
                         [ classes_ [ "btn", "btn-primary" ]
-                        ] [ text . ms $ currentInput model ]
+                        , onClick SaveMessage
+                        ] [ text "Post" ]
                     ]
                 ]
             , div_ [ class_ "divider" ] []
