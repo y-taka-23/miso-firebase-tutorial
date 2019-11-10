@@ -11,9 +11,11 @@ data Action =
     | SignIn
     | SignOut
     | SetUser (Maybe User)
+    | SetInput Text
 
 data Model = Model {
-      currentUser :: Maybe User
+      currentUser  :: Maybe User
+    , currentInput :: Text
     } deriving (Eq, Show)
 
 data User = User {
@@ -29,4 +31,5 @@ initialAction = NoOp
 initialModel :: Model
 initialModel = Model {
       currentUser = Nothing
+    , currentInput = mempty
     }

@@ -14,3 +14,4 @@ update SignOut model = model <# do
     signOut
     pure NoOp
 update (SetUser mUser) model = noEff model { currentUser = mUser }
+update (SetInput input) model = noEff model { currentInput = input }
