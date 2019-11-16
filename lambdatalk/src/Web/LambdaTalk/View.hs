@@ -5,6 +5,7 @@ module Web.LambdaTalk.View (view) where
 import Miso
     ( Attribute
     , View
+    , a_
     , button_
     , classList_
     , class_
@@ -50,7 +51,7 @@ navView model = header_ [ class_ "navbar" ] [
         ]
     , section_ [ class_ "navbar-section" ] [
           signInButton (currentUser model)
-        , button_
+        , a_
             [ class_ "btn"
             , href_ github
             ] [ text "Source" ]
