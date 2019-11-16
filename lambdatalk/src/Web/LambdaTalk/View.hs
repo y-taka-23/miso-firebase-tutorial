@@ -2,13 +2,15 @@
 
 module Web.LambdaTalk.View (view) where
 
-import Miso
+import qualified Data.Text   as T
+import           Miso
     ( Attribute
     , View
     , a_
     , button_
     , classList_
     , class_
+    , disabled_
     , div_
     , figure_
     , h1_
@@ -27,7 +29,7 @@ import Miso
     , type_
     , value_
     )
-import Miso.String ( MisoString, fromMisoString, ms )
+import           Miso.String ( MisoString, fromMisoString, ms )
 
 import Web.LambdaTalk.Model ( Action(..), Message(..), Model(..), User(..) )
 
@@ -94,6 +96,7 @@ inputView model = case currentUser model of
                   button_
                     [ classes_ [ "btn", "btn-primary" ]
                     , onClick SaveMessage
+                    , disabled_ . T.null $ currentInput model
                     ] [ text "Post" ]
                 ]
             ]
